@@ -1,0 +1,28 @@
+name: 'DReAM deploy'
+description: 'Deploy an application with DReAM'
+inputs:
+  workspace: # id of input
+    description: 'DReAM workspace to deploy to'
+    required: true
+  token: # id of input
+    description: 'DReAM token'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+      shell: "bash"
+
+    - run: npm install -g @novodream/cli-poc
+      shell: "bash"
+
+    - run: dream login --token ${{ inputs.token }}
+      shell: "bash"
+
+    - run: dream init -w ${{ inputs.workspace }}
+      shell: "bash"
+
+    - run: dream up
+      shell: "bash"
