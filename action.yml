@@ -7,6 +7,10 @@ inputs:
   token: # id of input
     description: 'DReAM token'
     required: true
+  privateKey: # id of input
+    description: 'Workspace private key'
+    required: false
+    default: ''
 runs:
   using: "composite"
   steps:
@@ -18,6 +22,14 @@ runs:
       shell: "bash"
 
     - run: dream login --token ${{ inputs.token }}
+      shell: "bash"
+
+    - env:
+        PRIVATE_KEY: ${{ inputs.privateKey }}
+        WORKSPACE: ${{ inputs.workspace }}
+      run: |
+        echo "${PRIVATE_KEY}" > ~/dream-private-${WORKSPACE}.pem
+        dream set-private-key -w ${WORKSPACE} ~/dream-private-${WORKSPACE}.pem
       shell: "bash"
 
     - run: dream init -w ${{ inputs.workspace }}
