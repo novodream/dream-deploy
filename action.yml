@@ -11,6 +11,10 @@ inputs:
     description: 'Workspace private key'
     required: false
     default: ''
+  action: # id of input
+    description: 'Action to run: up/down'
+    required: false
+    default: 'up'
 runs:
   using: "composite"
   steps:
@@ -36,4 +40,9 @@ runs:
       shell: "bash"
 
     - run: dream up
+      if: ${{ inputs.action == 'up' }}
+      shell: "bash"
+
+    - run: dream down
+      if: ${{ inputs.action == 'down' }}
       shell: "bash"
